@@ -1,8 +1,8 @@
 package com.app.tlnewsapp.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.app.androidnewsapp.R;
+import com.app.tlnewsapp.R;
 import com.app.tlnewsapp.Config;
 import com.app.tlnewsapp.models.News;
 import com.app.tlnewsapp.utils.Constant;

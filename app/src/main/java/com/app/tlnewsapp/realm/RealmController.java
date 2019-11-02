@@ -2,7 +2,7 @@ package com.app.tlnewsapp.realm;
 
 import android.app.Activity;
 import android.app.Application;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.app.tlnewsapp.models.News;
 import com.app.tlnewsapp.realm.table.NewsRealm;

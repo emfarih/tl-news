@@ -1,21 +1,9 @@
 package com.app.tlnewsapp.activities;
 
-import android.content.DialogInterface;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-import com.app.androidnewsapp.R;
-import com.app.tlnewsapp.Config;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivityVideoPlayer extends AppCompatActivity {
 

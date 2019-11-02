@@ -2,17 +2,17 @@ package com.app.tlnewsapp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.app.androidnewsapp.R;
+import com.app.tlnewsapp.R;
 import com.app.tlnewsapp.Config;
 import com.app.tlnewsapp.activities.ActivityNewsDetail;
 import com.app.tlnewsapp.activities.MainActivity;
