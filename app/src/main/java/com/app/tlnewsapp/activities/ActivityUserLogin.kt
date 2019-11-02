@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.app.tlnewsapp.activities
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.AsyncTask
@@ -36,22 +39,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.appbar.AppBarLayout
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import org.json.JSONException
 import org.json.JSONObject
 
+@Suppress("ControlFlowWithEmptyBody", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
 
-    private val RC_SIGN_IN: Int = 1
     private lateinit var strEmail: String
     private lateinit var strPassword: String
     private lateinit var strMessage: String
     private lateinit var strName: String
     private lateinit var strPassengerId: String
     private lateinit var strImage: String
-    private var strPhone: String? = null
     @Required(order = 1)
     @Email(order = 2, message = "Please Check and Enter a valid Email Address")
     private lateinit var edtEmail: EditText
@@ -66,10 +66,9 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
     private lateinit var myApp: MyApplication
     private lateinit var txtForgot: TextView
 
-    // FB and Google SignIn
-    private val EMAIL = "email"
     private lateinit var callbackManager: CallbackManager
     private lateinit var auth: FirebaseAuth
+    private var credentialWantToMerge: AuthCredential? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +77,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
 
         setupToolbar()
 
-        myApp = MyApplication.getInstance()
+        myApp = MyApplication.instance!!
         edtEmail = findViewById(R.id.edt_email)
         edtPassword = findViewById(R.id.edt_password)
         btnSingIn = findViewById(R.id.btn_update)
@@ -126,73 +125,120 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
         auth = FirebaseAuth.getInstance()
     }
 
+    private fun linkAccount() {
+        val tag = "LINK"
+        credentialWantToMerge?.let {
+            auth.currentUser?.linkWithCredential(it)
+                ?.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(tag, "linkWithCredential:success")
+                        Toast.makeText(baseContext, "Great!, now you can sign in from any providers",
+                                Toast.LENGTH_LONG).show()
+                        val user = task.result?.user
+                        updateUI(user)
+                    } else {
+                        Log.w(tag, "linkWithCredential:failure", task.exception)
+                        Toast.makeText(baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                        updateUI(null)
+                    }
+                }
+        }
+        credentialWantToMerge = null
+    }
+
     private fun handleFacebookAccessToken(token: AccessToken) {
-        val TAG = "FB TOKEN"
-        Log.d(TAG, "handleFacebookAccessToken:$token")
+        val tag = "FB TOKEN"
+        Log.d(tag, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success")
+                        Log.d(tag, "signInWithCredential:success")
                         val user = auth.currentUser
                         Toast.makeText(applicationContext, user?.email,Toast.LENGTH_LONG).show()
-//                        updateUI(user)
+                        if(credentialWantToMerge!=null) linkAccount()
+                        else updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-//                        updateUI(null)
+                        Log.w(tag, "signInWithCredential:failure", task.exception)
+                        try {
+                            throw task.exception!!
+                        } catch(e: FirebaseAuthUserCollisionException) {
+                            Toast.makeText(applicationContext, "User already exists, please login using the initial provider and we will merge it!",Toast.LENGTH_LONG).show()
+                            credentialWantToMerge = credential
+                        } catch(e: Exception) {
+                            Log.e(tag, e.message)
+                        }
                     }
                 }
     }
 
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            myApp.setUser(user)
+            Constant.GET_SUCCESS_MSG = 1
+            strEmail = user.email.toString()
+            strName = user.displayName.toString()
+            strPassengerId = user.uid
+            strImage = user.photoUrl.toString()
+            setResult()
+        }
+    }
+
     private fun setupFacebookLogin() {
-        val TAG = "FB"
+        val tag = "FB"
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                Log.d(TAG, "facebook:onSuccess:$loginResult")
+                Log.d(tag, "facebook:onSuccess:$loginResult")
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
-                Log.d(TAG, "facebook:onCancel")
+                Log.d(tag, "facebook:onCancel")
                 // ...
             }
 
             override fun onError(error: FacebookException) {
-                Log.d(TAG, "facebook:onError", error)
+                Log.d(tag, "facebook:onError", error)
                 // ...
             }
         })
 
         val buttonFacebookLogin = findViewById<Button>(R.id.btn_fb)
         buttonFacebookLogin.setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, listOf("email","public_profile","user_friends"))
+            LoginManager.getInstance().logInWithReadPermissions(this, listOf("email","public_profile"))
         }
 
     }
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val TAG = "GOOGLE"
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id!!)
-//        showProgressDialog()
+        val tag = "GOOGLE"
+        Log.d(tag, "firebaseAuthWithGoogle:" + acct.id!!)
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success")
+                        Log.d(tag, "signInWithCredential:success")
                         val user = auth.currentUser
                         Toast.makeText(applicationContext, user?.email,Toast.LENGTH_LONG).show()
-//                        updateUI(user)
+                        if(credentialWantToMerge!=null) linkAccount()
+                        else updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
 //                        Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
-//                        updateUI(null)
+                        Log.w(tag, "signInWithCredential:failure", task.exception)
+                        try {
+                            throw task.exception!!
+                        } catch(e: FirebaseAuthUserCollisionException) {
+                            Toast.makeText(applicationContext, "User already exists, please login using initial provider and merge it!",Toast.LENGTH_LONG).show()
+                            credentialWantToMerge = credential
+                        } catch(e: Exception) {
+                            Log.e(tag, e.message)
+                        }
                     }
 //                    hideProgressDialog()
                 }
@@ -205,12 +251,12 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
         if (actionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             supportActionBar!!.setHomeButtonEnabled(false)
-            supportActionBar!!.setTitle("")
+            supportActionBar!!.title = ""
         }
 
         val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
         if (appBarLayout.layoutParams != null) {
-            val layoutParams = appBarLayout.getLayoutParams() as CoordinatorLayout.LayoutParams
+            val layoutParams = appBarLayout.layoutParams as CoordinatorLayout.LayoutParams
             val appBarLayoutBehaviour = AppBarLayout.Behavior()
             appBarLayoutBehaviour.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
                 override fun canDrag(appBarLayout: AppBarLayout): Boolean {
@@ -242,13 +288,13 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-//        updateUI(currentUser)
+        updateUI(currentUser)
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
-            val TAG = "GOOGLE"
+            val tag = "GOOGLE"
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 // Google Sign In was successful, authenticate with Firebase
@@ -256,7 +302,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e)
+                Log.w(tag, "Google sign in failed", e)
                 // [START_EXCLUDE]
 //                updateUI(null)
                 // [END_EXCLUDE]
@@ -268,6 +314,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private inner class MyTaskLoginNormal : AsyncTask<String, Void, String>() {
 
         internal var progressDialog: ProgressDialog? = null
@@ -295,7 +342,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
                 try {
                     val mainJson = JSONObject(result)
                     val jsonArray = mainJson.getJSONArray(Constant.CATEGORY_ARRAY_NAME)
-                    var objJson: JSONObject? = null
+                    var objJson: JSONObject?
                     for (i in 0 until jsonArray.length()) {
                         objJson = jsonArray.getJSONObject(i)
                         if (objJson!!.has(Constant.MSG)) {
@@ -354,7 +401,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
                 val dialog = AlertDialog.Builder(this)
                 dialog.setTitle(R.string.login_title)
                 dialog.setMessage(R.string.login_success)
-                dialog.setPositiveButton(R.string.dialog_ok) { dialogInterface, i -> finish() }
+                dialog.setPositiveButton(R.string.dialog_ok) { _, _ -> finish() }
                 dialog.setCancelable(false)
                 dialog.show()
 
@@ -373,4 +420,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
         }
     }
 
+    companion object{
+        private const val RC_SIGN_IN = 1
+    }
 }

@@ -39,18 +39,6 @@ public class ApiConnector {
         // Convert HttpEntity into JSON Array
         JSONArray jsonArray = null;
 
-        if (httpEntity != null) {
-            try {
-                String entityResponse = EntityUtils.toString(httpEntity);
-                Log.e("Entity Response  : ", entityResponse);
-                jsonArray = new JSONArray(entityResponse);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         return jsonArray;
     }
 
