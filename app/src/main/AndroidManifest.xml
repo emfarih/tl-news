@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.app.androidnewsapp">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name="com.app.tlnewsapp.activities.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppMaterialTheme">
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivitySplash"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.app.tlnewsapp.activities.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityUserLogin"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityUserRegister"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityProfile"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityForgotPassword"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityFullScreenImage"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityComments"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivitySendComment"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityUpdateComment"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityReplyComment"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityNewsDetail"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityCategoryDetails"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityPrivacyPolicy"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityYoutubePlayer"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityVideoPlayer"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityWebView"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityWebViewImage"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivityNotificationDetail"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.app.tlnewsapp.activities.ActivitySearch"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="stateVisible" />
+
+        <service android:name="com.app.androidnewsapp.fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.app.androidnewsapp.fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+
+    </application>
+
+</manifest>

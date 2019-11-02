@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DREAMING</string>
+    <string name="app_version">Version 1.0</string>
+    <string name="copyright">Copyright © 2019 CTOC TEX Developer. \nAll right reserved</string>
+
+    <!--AdMob-->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
+    <!-- youtube -->
+    <string name="youtube_api_key">AIzaSyCbehD6DCeDZHaGl8SUWKh1koTiHwKcvKY</string>
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
+
+    <!-- play store application link i.e more apps -->
+    <string name="play_more_apps">https://play.google.com/store/apps/developer?id=Timlex</string>
+
+    <!--share-->
+    <string name="share_content">Hau hakarak fahe ida ne ho ita-bot.Husi ne ita-bot bele download app ida ne iha PlayStore</string>
+
+    <!--favorite-->
+    <string name="whops">Whoops!</string>
+    <string name="cannot_add_to_favorite">Labele Aumenta ba Favoritu</string>
+    <string name="favorite_added">Aumenta ba Favoritu</string>
+    <string name="favorite_removed">Halakon husi Favoritu</string>
+    <string name="no_favorite_found">Ita-nia lista favoritu seidauk iha tanba ita seidauk aumenta notisia ruma ba menu favoritu.</string>
+
+    <!--comments-->
+    <string name="title_comments">Komentariu</string>
+    <string name="title_update_comment">Komentariu</string>
+    <string name="title_send_comment">Manda Komentariu</string>
+    <string name="txt_no_comment">Fo ita-nia komentariu…</string>
+    <string name="msg_no_comment">Seidauk iha komentariu, hakerek ita-nia komentariu.</string>
+    <string name="comment_hint">Hakerek ita-nia komentariu&#8230;</string>
+    <string name="confirm_send_comment">Manda komentariu ida ne?</string>
+    <string name="confirm_update_comment">Aktualiza komentariu ida ne?</string>
+    <string name="confirm_delete_comment">Ita iha serteza hodi halakon komentariu ida ne?</string>
+    <string name="sending_comment">Haruka komentariu…</string>
+    <string name="updating_comment">Aktualiza komentariu…</string>
+    <string name="txt_read">Lee</string>
+    <string name="txt_comment">Komentariu</string>
+    <string name="txt_comments">Komentariu</string>
+    <string name="txt_you">Ita-bot</string>
+
+    <!--register-->
+    <string name="register_title">Obrigado ba Rejistu</string>
+    <string name="register_success">Rejistu susesu&#8230;</string>
+    <string name="register_process">Rejistu ita-nia perfil&#8230;</string>
+    <string name="register_exist">Email eziste tiha ona!</string>
+    <string name="terms_text">Ho rejistu, ita-bot konkorda ona ho</string>
+    <string name="terms_n_privacy">Termo &amp; Privasidade</string>
+    <string name="title_please_wait">Favor Hein&#8230;</string>
+    <string name="already_have_account">Iha ona perfil?</string>
+
+    <!--login-->
+    <string name="login_title">Furak!</string>
+    <string name="login_process">Prosesu login ba ita-nia perfil&#8230;</string>
+    <string name="login_success">Login Susesu&#8230;</string>
+    <string name="login_failed">Email ka Password Invalidu!</string>
+    <string name="login_disabled">Account has been disabled, please contact administrator to enable your account</string>
+    <string name="login_required">Favor login hodi fo komentariu.</string>
+    <string name="do_not_have_account">La iha perfil?</string>
+    <string name="register_now">Rejistu Agora</string>
+
+    <!--logout-->
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Ita iha serteza hodi logout?</string>
+    <string name="logout_process">Prosesu logout husi ita-nia perfil…</string>
+    <string name="logout_success">Logout Susesu</string>
+
+    <!--forgot password-->
+    <string name="forgot_message">Hatama email nebe ita uza hodi rejistu.</string>
+    <string name="forgot_failed_message">Email la eziste iha database!</string>
+    <string name="forgot_success_message">Password manda ona ba ita-nia email!</string>
+    <string name="forgot_password">Haluha Password?</string>
+
+    <!--permission-->
+    <string name="permission_msg">Presiza lisensa</string>
+    <string name="download_msg">Downloading&#8230;</string>
+    <string name="download_success">Image has been downloaded and saved on gallery.</string>
+
+    <!-- toolbar and title-->
+    <string name="title_menu_profile">Perfil</string>
+    <string name="title_menu_save">Salva</string>
+    <string name="title_menu_later">Favoritu</string>
+    <string name="title_menu_share">Share</string>
+    <string name="title_menu_search">Peskiza&#8230;</string>
+    <string name="title_menu_browser">Loke Iha Browser</string>
+    <string name="title_login">LOGIN</string>
+    <string name="title_register">REJISTU</string>
+    <string name="title_forgot_password">HALUHA PASSWORD</string>
+
+    <!--bottom navigation title-->
+    <string name="title_nav_home">Varanda</string>
+    <string name="title_nav_category">Kategoria</string>
+    <string name="title_nav_video">Video</string>
+    <string name="title_nav_profile">Perfil</string>
+
+    <!--about information-->
+    <string name="title_about_privacy">Polítika Privasidade</string>
+    <string name="title_about_rate">Fo Valor</string>
+    <string name="title_about_more">Seluk tan</string>
+    <string name="title_about_info">Konaba DREAMING</string>
+    <string name="sub_title_about_privacy">"Termo &amp; Privasidade App "</string>
+    <string name="sub_title_about_rate">Fo valor no feedback</string>
+    <string name="sub_title_about_more">Website Developer</string>
+
+    <!--network message-->
+    <string name="offline">Ita-bot sei offline</string>
+    <string name="msg_offline">Wainhira ita-bot online fali, koko halo favoritu ba notisia ruma nebe ita bele lee sem koneksaun husi internet.</string>
+    <string name="msg_no_news">Oops, parese seidauk iha notisia ruma ba ketegoria ida ne.</string>
+    <string name="msg_no_category">Oops, La iha Kategoria nebe Hetan!</string>
+    <string name="msg_no_news_found">Oops, La iha Notisia! se ita-bot hakarak kontinua peskiza, favor hatama fali keyword seluk!</string>
+    <string name="msg_no_network">Oops, iha problema ho ita nia rede ka server sei down, halo favor koko oras tan.</string>
+    <string name="msg_search_input">Favor hatama keyword</string>
+
+    <!--dialog choose option-->
+    <string name="dialog_success">Susesu!</string>
+    <string name="dialog_yes">OK</string>
+    <string name="dialog_no">Lae</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_read_more">Lee liu tan</string>
+    <string name="dialog_dismiss">Hapara</string>
+    <string name="dialog_settings">GOTO SETTINGS</string>
+
+    <!--form-->
+    <string name="edt_name">Naran</string>
+    <string name="edt_email">Email</string>
+    <string name="edt_password">Password</string>
+
+    <!--button-->
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REJISTU</string>
+    <string name="btn_send">MANDA</string>
+
+    <!--profile-->
+    <string name="txt_profile_edit">EDIT</string>
+    <string name="txt_profile_welcome">Ola!</string>
+    <string name="txt_profile_not_registered">Seidauk rejistu?</string>
+    <string name="txt_profile_register_now">Rejistu Agora</string>
+    <string name="txt_profile_login">LOGIN</string>
+    <string name="txt_profile_logout">Logout</string>
+    <string name="updating_profile">Hafoun Perfil</string>
+    <string name="waiting_message">Favor hein&#8230;</string>
+
+    <!--close message-->
+    <string name="press_again_to_exit">Hanehan dala ida tan hodi taka app</string>
+
+    <!--privacy policy url-->
+    <string name="privacy_policy_url">https://www.solodroid.net/android-news-app/privacy-policy/</string>
+    <string name="dialog_cancel">Kansela</string>
+    <string name="title_menu_close">Taka</string>
+    <string name="title_menu_send">Manda</string>
+    <string name="title_nav_favorite">Favoritu</string>
+    <string name="button">Button</string>
+    <string name="logout">LOGOUT</string>
+    <string name="todo">TODO</string>
+    <string name="btn_retry">RETRY</string>
+    <string name="permission_upload">App ida ne presiza asesu storage hodi upload ita-nia imagen</string>
+
+</resources>
