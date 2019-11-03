@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.app.tlnewsapp.fragment
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -87,6 +90,7 @@ class FragmentProfile : Fragment() {
             return data
         }
 
+    @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         root_view = inflater.inflate(R.layout.fragment_profile, null)
         parent_view = activity!!.findViewById(R.id.main_content)
@@ -115,7 +119,7 @@ class FragmentProfile : Fragment() {
         recyclerView.adapter = adapterAbout
 
         adapterAbout.setOnItemClickListener(object : AdapterAbout.OnItemClickListener {
-            override fun onItemClick(v: View, obj: Data, position: Int) {
+            override fun onItemClick(view: View, obj: Data, position: Int) {
                 if (position == 0) {
                     startActivity(Intent(activity, ActivityPrivacyPolicy::class.java))
                 }
@@ -161,6 +165,12 @@ class FragmentProfile : Fragment() {
                             .into(img_profile)
                 }
             }
+            txt_edit.setOnClickListener { startActivity(Intent(activity, ActivityProfile::class.java).apply {
+                putExtra("name",user.name)
+                putExtra("email",user.email)
+                putExtra("user_image",user.imageUrl)
+                putExtra("password", "")
+            }) }
 
             txt_logout.visibility = View.VISIBLE
             txt_logout.setOnClickListener { logoutDialog() }
@@ -177,7 +187,7 @@ class FragmentProfile : Fragment() {
         super.onResume()
     }
 
-    fun logoutDialog() {
+    private fun logoutDialog() {
 
         val builder = AlertDialog.Builder(activity!!)
         builder.setTitle(R.string.logout_title)
@@ -188,11 +198,11 @@ class FragmentProfile : Fragment() {
             progressDialog.show()
             Handler().postDelayed({
                 progressDialog.dismiss()
-                val builder = AlertDialog.Builder(activity!!)
-                builder.setMessage(R.string.logout_success)
-                builder.setPositiveButton(R.string.dialog_ok) { dialogInterface, i -> refreshFragment() }
-                builder.setCancelable(false)
-                builder.show()
+                val builder1 = AlertDialog.Builder(activity!!)
+                builder1.setMessage(R.string.logout_success)
+                builder1.setPositiveButton(R.string.dialog_ok) { dialogInterface, i -> refreshFragment() }
+                builder1.setCancelable(false)
+                builder1.show()
             }, Constant.DELAY_PROGRESS_DIALOG.toLong())
         }
         builder.setNegativeButton(R.string.dialog_cancel, null)
@@ -200,11 +210,12 @@ class FragmentProfile : Fragment() {
 
     }
 
-    fun refreshFragment() {
+    private fun refreshFragment() {
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.detach(this).attach(this).commit()
     }
 
+    @SuppressLint("StaticFieldLeak")
     private inner class GetUserImage : AsyncTask<ApiConnector, Long, JSONArray?>() {
         override fun doInBackground(vararg params: ApiConnector): JSONArray? {
             return params[0].GetCustomerDetails(myApplication.userId)
@@ -217,20 +228,19 @@ class FragmentProfile : Fragment() {
                 val user_id = objJson!!.getString("id")
                 val name = objJson.getString("name")
                 val email = objJson.getString("email")
-                val user_image = objJson.getString("imageName")
+                val userImage = objJson.getString("imageName")
                 val password = objJson.getString("password")
 
                 txt_username.text = name
                 txt_email.text = email
 
-                if (user_image == "") {
+                if (userImage == "") {
                     img_profile.setImageResource(R.drawable.ic_user_account_white)
                 } else {
                     Picasso.with(activity)
-                            .load(Config.ADMIN_PANEL_URL + "/upload/avatar/" + user_image.replace(" ", "%20"))
+                            .load(Config.ADMIN_PANEL_URL + "/upload/avatar/" + userImage.replace(" ", "%20"))
                             .resize(300, 300)
                             .centerCrop()
-
                             .into(img_profile)
                 }
 
@@ -238,7 +248,7 @@ class FragmentProfile : Fragment() {
                     val intent = Intent(activity, ActivityProfile::class.java)
                     intent.putExtra("name", name)
                     intent.putExtra("email", email)
-                    intent.putExtra("user_image", user_image)
+                    intent.putExtra("user_image", userImage)
                     intent.putExtra("password", password)
                     startActivity(intent)
                 }

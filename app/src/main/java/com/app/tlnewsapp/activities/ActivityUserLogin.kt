@@ -340,6 +340,7 @@ class ActivityUserLogin : AppCompatActivity(), Validator.ValidationListener {
             } else {
 
                 try {
+                    Log.e("TAG",result.toString())
                     val mainJson = JSONObject(result)
                     val jsonArray = mainJson.getJSONArray(Constant.CATEGORY_ARRAY_NAME)
                     var objJson: JSONObject?

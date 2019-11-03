@@ -99,6 +99,7 @@
                             android:layout_height="wrap_content">
 
                             <EditText
+                                android:enabled="false"
                                 android:id="@+id/edt_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

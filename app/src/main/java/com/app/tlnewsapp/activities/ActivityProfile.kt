@@ -1,13 +1,12 @@
 package com.app.tlnewsapp.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -18,13 +17,11 @@ import android.os.Handler
 import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.provider.Settings
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -39,9 +36,7 @@ import com.app.tlnewsapp.utils.NetworkCheck
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.DexterError
 import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.PermissionRequestErrorListener
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.squareup.picasso.Picasso
 
@@ -52,7 +47,6 @@ import org.json.JSONException
 import org.json.JSONObject
 
 import java.io.ByteArrayOutputStream
-import java.io.FileDescriptor
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.ArrayList
@@ -79,12 +73,6 @@ class ActivityProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-
-        if (Config.ENABLE_RTL_MODE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
-            }
-        }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -121,13 +109,19 @@ class ActivityProfile : AppCompatActivity() {
         txt_name.setText(str_name)
         txt_email.setText(str_email)
         txt_pwd.setText(str_password)
+        Picasso.with(this@ActivityProfile)
+                .load(str_image)
+                .resize(300, 300)
+                .centerCrop()
+                .placeholder(R.drawable.ic_user_account_white)
+                .into(img_profile)
 
         if (NetworkCheck.isNetworkAvailable(this@ActivityProfile)) {
             //new MyTask().execute(Constant.PROFILE_URL + myApplication.getUserId());
-            getUserImage().execute(ApiConnector())
+            GetUserImage().execute(ApiConnector())
         } else {
             showToast("No Network Connection!!")
-            SetMessage()
+            setMessage()
         }
 
         img_change!!.setOnClickListener { requestStoragePermission() }
@@ -205,7 +199,7 @@ class ActivityProfile : AppCompatActivity() {
 
                 } else {
                     showToast("No Network Connection!!")
-                    SetMessage()
+                    setMessage()
                 }
                 return true
             }
@@ -222,6 +216,7 @@ class ActivityProfile : AppCompatActivity() {
         Toast.makeText(this@ActivityProfile, msg, Toast.LENGTH_LONG).show()
     }
 
+    @SuppressLint("StaticFieldLeak")
     private inner class MyTaskUp : AsyncTask<String, Void, String>() {
         private var pDialog: ProgressDialog? = null
 
@@ -283,7 +278,7 @@ class ActivityProfile : AppCompatActivity() {
         }
     }
 
-    private fun SetMessage(): AlertDialog {
+    private fun setMessage(): AlertDialog {
 
         var alert = AlertDialog.Builder(this@ActivityProfile)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -308,7 +303,7 @@ class ActivityProfile : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT < 19) {
                     val selectedImagePath = getPath(selectedImageUri)
                     val bitmap = BitmapFactory.decodeFile(selectedImagePath)
-                    SetImage(bitmap)
+                    setImage(bitmap)
                 } else {
                     val parcelFileDescriptor: ParcelFileDescriptor?
                     try {
@@ -316,7 +311,7 @@ class ActivityProfile : AppCompatActivity() {
                         val fileDescriptor = parcelFileDescriptor!!.fileDescriptor
                         val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
                         parcelFileDescriptor.close()
-                        SetImage(image)
+                        setImage(image)
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     } catch (e: IOException) {
@@ -329,7 +324,7 @@ class ActivityProfile : AppCompatActivity() {
         }
     }
 
-    private fun SetImage(image: Bitmap) {
+    private fun setImage(image: Bitmap) {
         this.img_profile!!.setImageBitmap(image)
 
         // upload
@@ -362,45 +357,44 @@ class ActivityProfile : AppCompatActivity() {
 
     }
 
-    fun getPath(uri: Uri?): String? {
+    private fun getPath(uri: Uri?): String? {
         if (uri == null) {
             return null
         }
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = contentResolver.query(uri, projection, null, null, null)
         if (cursor != null) {
-            val column_index = cursor
+            val columnIndex = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             cursor.moveToFirst()
-            return cursor.getString(column_index)
+            return cursor.getString(columnIndex)
         }
         return uri.path
     }
 
-    private inner class getUserImage : AsyncTask<ApiConnector, Long, JSONArray>() {
+    private inner class GetUserImage : AsyncTask<ApiConnector, Long, JSONArray?>() {
         override fun doInBackground(vararg params: ApiConnector): JSONArray? {
             return params[0].GetCustomerDetails(myApplication!!.userId)
         }
 
-        override fun onPostExecute(jsonArray: JSONArray) {
+        override fun onPostExecute(jsonArray: JSONArray?) {
 
             try {
 
-                var objJson: JSONObject? = null
-                objJson = jsonArray.getJSONObject(0)
+                val objJson: JSONObject? = jsonArray?.getJSONObject(0)
                 val user_id = objJson!!.getString("id")
-                val user_image = objJson.getString("imageName")
+                val userImage = objJson.getString("imageName")
 
-                if (user_image == "") {
+                if (str_image == "") {
                     img_profile!!.setImageResource(R.drawable.ic_user_account_white)
                 } else {
 
-                    Picasso.with(this@ActivityProfile)
-                            .load(Config.ADMIN_PANEL_URL + "/upload/avatar/" + user_image.replace(" ", "%20"))
-                            .resize(300, 300)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_user_account_white)
-                            .into(img_profile)
+//                    Picasso.with(this@ActivityProfile)
+//                            .load(Config.ADMIN_PANEL_URL + "/upload/avatar/" + userImage.replace(" ", "%20"))
+//                            .resize(300, 300)
+//                            .centerCrop()
+//                            .placeholder(R.drawable.ic_user_account_white)
+//                            .into(img_profile)
                 }
 
             } catch (e: Exception) {
