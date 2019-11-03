@@ -27,7 +27,6 @@ import java.util.List;
 
 public class AdapterNews extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEW_PROG = 0;
     private final int VIEW_ITEM = 1;
 
     private List<News> items = new ArrayList<>();
@@ -162,7 +161,7 @@ public class AdapterNews extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (items.get(position) != null) {
             return VIEW_ITEM;
         } else {
-            return VIEW_PROG;
+            return 0;
         }
     }
 

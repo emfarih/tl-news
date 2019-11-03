@@ -106,7 +106,7 @@ public class ActivityCategoryDetails extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new AdapterRecent.OnItemClickListener() {
             @Override
             public void onItemClick(View v, News obj, int position) {
-                ActivityNewsDetail.navigate(ActivityCategoryDetails.this, v.findViewById(R.id.image), obj);
+                ActivityNewsDetail.Companion.navigate(ActivityCategoryDetails.this, v.findViewById(R.id.image), obj);
                 showInterstitialAd();
             }
         });

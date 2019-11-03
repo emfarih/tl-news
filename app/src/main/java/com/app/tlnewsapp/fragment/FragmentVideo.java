@@ -74,7 +74,7 @@ public class FragmentVideo extends Fragment {
         mAdapter.setOnItemClickListener(new AdapterVideo.OnItemClickListener() {
             @Override
             public void onItemClick(View v, News obj, int position) {
-                ActivityNewsDetail.navigate((MainActivity) getActivity(), v.findViewById(R.id.image), obj);
+                ActivityNewsDetail.Companion.navigate((MainActivity) getActivity(), v.findViewById(R.id.image), obj);
                 showInterstitialAd();
             }
         });

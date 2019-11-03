@@ -64,7 +64,7 @@ public class FragmentFavorite extends Fragment {
         mAdapter.setOnItemClickListener(new AdapterNews.OnItemClickListener() {
             @Override
             public void onItemClick(View v, News obj, int position) {
-                ActivityNewsDetail.navigate((MainActivity) getActivity(), v.findViewById(R.id.image), obj);
+                ActivityNewsDetail.Companion.navigate((MainActivity) getActivity(), v.findViewById(R.id.image), obj);
             }
         });
 

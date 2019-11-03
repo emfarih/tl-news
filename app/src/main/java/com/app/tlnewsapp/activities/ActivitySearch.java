@@ -102,7 +102,7 @@ public class ActivitySearch extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new AdapterNews.OnItemClickListener() {
             @Override
             public void onItemClick(View v, News obj, int position) {
-                ActivityNewsDetail.navigate(ActivitySearch.this, v.findViewById(R.id.image), obj);
+                ActivityNewsDetail.Companion.navigate(ActivitySearch.this, v.findViewById(R.id.image), obj);
             }
         });
 
